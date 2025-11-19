@@ -7,6 +7,7 @@ use App\Models\Institution;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Storage;
 
 class StudentController extends Controller
 {
@@ -31,22 +32,22 @@ class StudentController extends Controller
      */
     public function index(Request $request): View
     {
-        $this->ensureDefaultInstitution();
+        $this->ensureDefaultInstitutions();
 
         $institutions = Institution::all();
 
-        $selectedInstitution = $request->query('institutions');
+        $selectedInstitutions = $request->query('institutions');
 
 
-        $query = Student::with('institutions');
+        $query = Student::with('institution');
 
-        if ($selectedInstitution) {
-            $query->where('institution_id', $selectedInstitution);
+        if ($selectedInstitutions) {
+            $query->where('institution_id', $selectedInstitutions);
         }
 
         $students = $query->get();
 
-        return view('students.index', compact('students', 'institutions', 'selectedInstitution'));
+        return view('students.index', compact('students', 'institutions', 'selectedInstitutions'));
     }
 
     /**
@@ -143,7 +144,7 @@ class StudentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Student $student)
     {
         if ($student->photo) {
             Storage::disk('public')->delete($student->photo);

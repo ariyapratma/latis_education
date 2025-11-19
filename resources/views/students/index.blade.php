@@ -94,9 +94,9 @@
 
             // Event listener for export Excel
             $('#exportExcelBtn').on('click', function() {
-                var selectedInstitution = $('#filterInstitution').val();
+                var selectedInstitutions = $('#filterInstitution').val();
                 // Redirect to route export, with institution filter if available
-                window.location.href = '{{ route("students.export") }}' + (selectedInstitution ? '?institution=' + selectedInstitution : '');
+                window.location.href = '{{ route("students.export") }}' + (selectedInstitutions ? '?institution=' + selectedInstitutions : '');
             });
         });
     </script>
